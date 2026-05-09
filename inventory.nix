@@ -18,18 +18,7 @@
     hcloud-x86_64.tags = ["hcloud" "x86_64"];
   };
 
-  # --- Clan Services --- #
   instances = {
-    # --- Root Users --- #
-    users.roles.default = {
-      tags = ["all"];
-      settings = {
-        user = "root";
-        share = true;
-        prompt = false;
-      };
-    };
-
     # --- Importers --- #
     importer.roles.default = {
       tags = ["all"];

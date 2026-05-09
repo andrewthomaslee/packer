@@ -8,22 +8,27 @@
       inputs.determinate.nixosModules.default
     ];
 
+    # --- Users --- #
+    users.users.root.password = "goku-black-is-cool-and-awesome";
+
+    system.stateVersion = lib.trivial.release;
+
     # --- OpenSSH --- #
     services.openssh = {
-      enable = true;
+      enable = lib.mkForce true;
       openFirewall = true;
       ports = [22];
       authorizedKeysFiles = ["/etc/ssh/global_keys"];
       settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
+        PasswordAuthentication = lib.mkDefault true;
+        KbdInteractiveAuthentication = lib.mkDefault true;
       };
     };
 
     # --- Clan-Core --- #
     clan.core = {
       deployment.requireExplicitUpdate = lib.mkDefault false;
-      settings.state-version.enable = lib.mkDefault true;
+      settings.state-version.enable = lib.mkForce false;
     };
 
     # --- Nixpkgs --- #
