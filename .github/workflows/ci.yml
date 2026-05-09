@@ -41,14 +41,11 @@ jobs:
       - name: Nix Flake Check
         run: nix flake check --show-trace
 
-      - name: Build devShell
-        run: nix build .#devShell --show-trace
+      - name: Build Hcloud x86_64
+        run: nix build .#hcloud-x86_64 --show-trace
 
-      - name: Build Hcloud
-        run: nix build .#hcloud --show-trace
-
-      - name: Build AWS
-        run: nix build .#aws --show-trace
+      - name: Build AWS x86_64
+        run: nix build .#aws-x86_64 --show-trace
       
       - name: Build MkDocs
         run: nix build .#documentation --show-trace
