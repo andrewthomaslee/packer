@@ -6,16 +6,16 @@ repo_name: andrewthomaslee/packer
 
 nav:
   - Home: index.md
+  - Packer:
+      - Overview: packer/index.md
+      - AWS: packer/aws.md
+      - HCloud: packer/hcloud.md
   - Flake Parts:
       - Overview: flake-parts/index.md
-      - Default: flake-parts/default.md
       - Dev Shells: flake-parts/devShells.md
-      - Apps:
-          - Overview: flake-parts/apps/index.md
-      - Packages:
-          - Overview: flake-parts/packages/index.md
-      - NixOS Modules:
-          - Overview: flake-parts/nixosModules/index.md
+      - Apps: flake-parts/apps/index.md
+      - Packages: flake-parts/packages/index.md
+      - NixOS Modules: flake-parts/nixosModules/index.md
 
 plugins:
   - glightbox
