@@ -35,59 +35,25 @@
       eval "$(bunx varlock load --format shell)"
     '';
   in {
-    apps = {
-      packer-hcloud-x86_64 = {
-        inherit type;
-        program = lib.getExe (pkgs.writeShellApplication {
-          inherit runtimeInputs;
-          name = "packer-hcloud-x86_64";
-          text =
-            pre-text
-            + ''
-              packer init ${self'.packages.hcloud-x86_64-pkr-json}
-              packer build ${self'.packages.hcloud-x86_64-pkr-json}
-            '';
-        });
-      };
-      packer-hcloud-aarch64 = {
-        inherit type;
-        program = lib.getExe (pkgs.writeShellApplication {
-          inherit runtimeInputs;
-          name = "packer-hcloud-aarch64";
-          text =
-            pre-text
-            + ''
-              packer init ${self'.packages.hcloud-aarch64-pkr-json}
-              packer build ${self'.packages.hcloud-aarch64-pkr-json}
-            '';
-        });
-      };
-      packer-aws-x86_64 = {
-        inherit type;
-        program = lib.getExe (pkgs.writeShellApplication {
-          inherit runtimeInputs;
-          name = "packer-aws-x86_64";
-          text =
-            pre-text
-            + ''
-              packer init ${self'.packages.aws-x86_64-pkr-json}
-              packer build ${self'.packages.aws-x86_64-pkr-json}
-            '';
-        });
-      };
-      packer-aws-aarch64 = {
-        inherit type;
-        program = lib.getExe (pkgs.writeShellApplication {
-          inherit runtimeInputs;
-          name = "packer-aws-aarch64";
-          text =
-            pre-text
-            + ''
-              packer init ${self'.packages.aws-aarch64-pkr-json}
-              packer build ${self'.packages.aws-aarch64-pkr-json}
-            '';
-        });
-      };
-    };
+    apps = let
+      packerPackages = lib.filterAttrs (name: _: lib.hasSuffix "-pkr-json" name) self'.packages;
+      generateApp = name: pkg: let
+        appName = "packer-" + lib.removeSuffix "-pkr-json" name;
+      in
+        lib.nameValuePair appName {
+          inherit type;
+          program = lib.getExe (pkgs.writeShellApplication {
+            inherit runtimeInputs;
+            name = appName;
+            text =
+              pre-text
+              + ''
+                packer init ${pkg}
+                packer build ${pkg}
+              '';
+          });
+        };
+    in
+      lib.mapAttrs' generateApp packerPackages;
   };
 }
