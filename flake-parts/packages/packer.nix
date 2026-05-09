@@ -1,9 +1,9 @@
 {self, ...}: {
   # ------ Per-System ------ #
-  perSystem = {system, ...}: {
+  perSystem = {...}: {
     packages = {
-      # hcloud = self.nixosConfigurations.${system}.hcloud.config.system.build.toplevel;
-      # aws = self.nixosConfigurations.${system}.aws.config.system.build.toplevel;
+      hcloud = self.nixosConfigurations.hcloud.config.system.build.toplevel;
+      aws = self.nixosConfigurations.aws.config.system.build.toplevel;
     };
   };
 }
