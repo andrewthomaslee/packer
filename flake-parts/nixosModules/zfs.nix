@@ -6,7 +6,7 @@
     pkgs,
     ...
   }: {
-    environment.systemPackages = with pkgs; [zstd];
+    environment.systemPackages = with pkgs; [zstd lz4];
 
     systemd.tmpfiles.rules = [
       "L+ /usr/local/bin - - - - /run/current-system/sw/bin/"
@@ -87,7 +87,7 @@
         type = "zpool";
         mountpoint = "/";
         rootFsOptions = {
-          compression = "zstd";
+          compression = "zstd-19";
           acltype = "posixacl";
           xattr = "sa";
           atime = "off";
