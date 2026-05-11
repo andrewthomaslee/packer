@@ -87,7 +87,7 @@
         type = "zpool";
         mountpoint = "/";
         rootFsOptions = {
-          compression = "zstd-19";
+          compression = "zstd-fast";
           acltype = "posixacl";
           xattr = "sa";
           atime = "off";
