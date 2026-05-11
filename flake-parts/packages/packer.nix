@@ -8,7 +8,7 @@
     # common variables
     inherit (lib.trivial) release;
     os = "nixos";
-    distro = "determinate+clan";
+    distro = "determinate-clan";
     timestamp = "{{timestamp}}";
 
     temp-key-vars = {
@@ -52,7 +52,7 @@
         location = "hel1";
         ssh_username = "root";
         snapshot_labels = {
-          inherit release os distro timestamp;
+          inherit release os distro;
         };
       };
       build = {
