@@ -22,7 +22,11 @@
     # --- Importers --- #
     importer.roles.default = {
       tags = ["all"];
-      extraModules = [self.nixosModules.default];
+      extraModules = [
+        self.nixosModules.default
+        self.nixosModules.motd
+        self.nixosModules.zfs
+      ];
     };
 
     hcloud = {

@@ -2,7 +2,7 @@
   description = "Minimal NixOS Packer Images and Scripts";
   inputs = {
     # Nixpkgs
-    nixpkgs.follows = "clan-core/nixpkgs";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0";
 
     # Determinate Nix
     # https://docs.determinate.systems/guides/advanced-installation/
@@ -13,7 +13,10 @@
 
     # Clan.lol
     # https://clan.lol/docs/unstable
-    clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
+    clan-core = {
+      url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Mkdocs
     mkdocs-flake = {

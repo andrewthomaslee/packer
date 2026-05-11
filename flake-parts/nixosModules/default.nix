@@ -1,10 +1,12 @@
 {inputs, ...}: {
   flake.nixosModules.default = {
+    modulesPath,
     pkgs,
     lib,
     ...
   }: {
     imports = [
+      (modulesPath + "/profiles/qemu-guest.nix")
       inputs.determinate.nixosModules.default
     ];
 
@@ -87,60 +89,6 @@
       useNetworkd = lib.mkDefault true;
       networkmanager.enable = lib.mkDefault false;
       useDHCP = lib.mkDefault false;
-    };
-
-    # --- Boot --- #
-    boot = {
-      tmp = {
-        useTmpfs = lib.mkDefault false;
-        cleanOnBoot = lib.mkDefault true;
-      };
-      loader.grub = {
-        enable = lib.mkDefault true;
-        efiSupport = lib.mkDefault true;
-        efiInstallAsRemovable = lib.mkDefault true;
-      };
-    };
-
-    # --- Disko Partitions --- #
-    disko.devices = {
-      disk = {
-        main = {
-          name = "main";
-          device = lib.mkDefault "/dev/sda";
-          type = "disk";
-          content = {
-            type = "gpt";
-            partitions = {
-              boot = {
-                size = "1M";
-                type = "EF02";
-                priority = 1;
-              };
-              ESP = {
-                type = "EF00";
-                size = "3G";
-                content = {
-                  type = "filesystem";
-                  format = "vfat";
-                  mountpoint = "/boot";
-                  mountOptions = ["umask=0077"];
-                };
-              };
-              nixos = {
-                size = "100%";
-                content = {
-                  type = "filesystem";
-                  format = "ext4";
-                  mountpoint = "/";
-                  mountOptions = ["noatime"];
-                  extraArgs = ["-L" "nixos"];
-                };
-              };
-            };
-          };
-        };
-      };
     };
   };
 }

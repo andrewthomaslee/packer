@@ -1,6 +1,6 @@
 {...}: {
   # ------ NixOS Modules ------ #
-  flake.nixosModules.default = {
+  flake.nixosModules.motd = {
     pkgs,
     config,
     ...
