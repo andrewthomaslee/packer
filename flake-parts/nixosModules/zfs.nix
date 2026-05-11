@@ -6,7 +6,7 @@
     pkgs,
     ...
   }: {
-    environment.systemPackages = with pkgs; [zstd lz4];
+    environment.systemPackages = with pkgs; [zstd lz4 gzip];
 
     systemd.tmpfiles.rules = [
       "L+ /usr/local/bin - - - - /run/current-system/sw/bin/"
