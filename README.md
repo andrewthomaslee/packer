@@ -31,13 +31,17 @@
 
 ### **Included Modules**
 
-`Determinate Systems` • `Clan.lol`
+`Determinate Systems` • `Clan.lol` • `ZFS`
 
 </div>
 
 ## Usage
+### 1. Credentials
+Create a `.env` file without spaces or comments in the root of the project follwing `.env.schema`
 
-To create a `Hetzner Cloud` image use the [*FlakeHub*](https://flakehub.com/flake/andrewthomaslee/packer?view=usage) url:
+### 2. Run
+This will create a `Hetzner Cloud` image.
+Use the [*FlakeHub*](https://flakehub.com/flake/andrewthomaslee/packer?view=usage) url:
 ```console
 nix run "https://flakehub.com/f/andrewthomaslee/packer/*#packer-hcloud-x86_64"
 ```
@@ -45,6 +49,10 @@ or the [*GitHub*](https://github.com/andrewthomaslee/packer/releases) url:
 ```console
 nix run github:andrewthomaslee/packer#packer-hcloud-x86_64
 ```
+### 3. Result
+![packer-run](documentation/docs/assets/packer-run.png)
+In `Hetzner Cloud` you can see the new image:
+![packer-result](documentation/docs/assets/packer-result.png)
 
 
 ## Project layout
