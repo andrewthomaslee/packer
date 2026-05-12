@@ -17,7 +17,7 @@
     ];
     pre-text = ''
       export REPO_ROOT
-      REPO_ROOT=${self}
+      REPO_ROOT=$(git rev-parse --show-toplevel)
       export CLAN_DIR
       CLAN_DIR="$REPO_ROOT"
 
