@@ -44,11 +44,15 @@
     };
 
     # Often hangs
-    systemd.services = {
-      NetworkManager-wait-online.enable = lib.mkForce false;
-      systemd-networkd-wait-online.enable = lib.mkForce false;
+    systemd = {
+      tmpfiles.rules = [
+        "L+ /usr/local/bin - - - - /run/current-system/sw/bin/"
+      ];
+      services = {
+        NetworkManager-wait-online.enable = lib.mkForce false;
+        systemd-networkd-wait-online.enable = lib.mkForce false;
+      };
     };
-
     # --- Localization --- #
     i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
     time.timeZone = lib.mkDefault "America/Chicago";
@@ -89,6 +93,19 @@
       useNetworkd = lib.mkDefault true;
       networkmanager.enable = lib.mkDefault false;
       useDHCP = lib.mkDefault false;
+    };
+
+    # --- Boot --- #
+    boot = {
+      loader.grub = {
+        enable = lib.mkDefault true;
+        efiInstallAsRemovable = lib.mkDefault true;
+        efiSupport = lib.mkDefault true;
+      };
+      tmp = {
+        useTmpfs = lib.mkDefault false;
+        cleanOnBoot = lib.mkDefault true;
+      };
     };
   };
 }

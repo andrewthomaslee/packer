@@ -6,13 +6,13 @@
     pkgs,
     ...
   }: {
-    environment.systemPackages = with pkgs; [zstd lz4 gzip];
-
-    systemd.tmpfiles.rules = [
-      "L+ /usr/local/bin - - - - /run/current-system/sw/bin/"
+    environment.systemPackages = with pkgs; [
+      zstd
+      lz4
+      gzip
+      e2fsprogs
+      xfsprogs
     ];
-
-    networking.hostId = "4e98920d"; # Must be unique after installation
 
     # --- Boot --- #
     boot = {
@@ -20,18 +20,9 @@
       initrd.supportedFilesystems = ["zfs"];
       loader = {
         systemd-boot.enable = lib.mkDefault false;
-        grub = {
-          enable = lib.mkDefault true;
-          efiInstallAsRemovable = lib.mkDefault true;
-          zfsSupport = lib.mkDefault true;
-          efiSupport = lib.mkDefault true;
-        };
+        grub.zfsSupport = lib.mkDefault true;
       };
       zfs.forceImportRoot = lib.mkDefault false;
-      tmp = {
-        useTmpfs = lib.mkDefault false;
-        cleanOnBoot = lib.mkDefault true;
-      };
     };
 
     # --- ZFS --- #

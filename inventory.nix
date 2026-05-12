@@ -11,11 +11,15 @@
 
   machines = {
     # AWS
-    aws-aarch64.tags = ["aws" "aarch64"];
-    aws-x86_64.tags = ["aws" "x86_64"];
+    aws-ext4-aarch64.tags = ["aws" "ext4" "aarch64"];
+    aws-ext4-x86_64.tags = ["aws" "ext4" "x86_64"];
+    aws-zfs-aarch64.tags = ["aws" "zfs" "aarch64"];
+    aws-zfs-x86_64.tags = ["aws" "zfs" "x86_64"];
     # Hetzner Cloud
-    hcloud-aarch64.tags = ["hcloud" "aarch64"];
-    hcloud-x86_64.tags = ["hcloud" "x86_64"];
+    hcloud-ext4-aarch64.tags = ["hcloud" "ext4" "aarch64"];
+    hcloud-ext4-x86_64.tags = ["hcloud" "ext4" "x86_64"];
+    hcloud-zfs-aarch64.tags = ["hcloud" "zfs" "aarch64"];
+    hcloud-zfs-x86_64.tags = ["hcloud" "zfs" "x86_64"];
   };
 
   instances = {
@@ -25,8 +29,23 @@
       extraModules = [
         self.nixosModules.default
         self.nixosModules.motd
-        self.nixosModules.zfs
       ];
+    };
+
+    zfs = {
+      module.name = "importer";
+      roles.default = {
+        tags = ["zfs"];
+        extraModules = [self.nixosModules.zfs];
+      };
+    };
+
+    ext4 = {
+      module.name = "importer";
+      roles.default = {
+        tags = ["ext4"];
+        extraModules = [self.nixosModules.ext4];
+      };
     };
 
     hcloud = {
