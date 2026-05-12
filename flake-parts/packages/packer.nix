@@ -157,7 +157,7 @@
           copy-ssh-key
           {
             shell-local.inline = [
-              "clan machines install aws-${fs}-${system} --target-host root@\${build.Host} --update-hardware-config nixos-generate-config -i \${var.temp_priv_key} --host-key-check none --yes"
+              "clan machines install aws-${fs}-${system} --target-host root@\${build.Host} --no-persist-state -i \${var.temp_priv_key} --host-key-check none --yes"
             ];
           }
         ];
