@@ -25,8 +25,11 @@
     # To be used in build.provisioner
     copy-ssh-key = {
       shell.inline = [
-        "mkdir -p /root/.ssh"
-        "echo '\${var.temp_pub_key}' >> /root/.ssh/authorized_keys"
+        "SUDO=$(command -v sudo || true)"
+        "$SUDO mkdir -p /root/.ssh"
+        "$SUDO chmod 700 /root/.ssh"
+        "echo '\${var.temp_pub_key}' | $SUDO tee -a /root/.ssh/authorized_keys"
+        "$SUDO chmod 600 /root/.ssh/authorized_keys"
       ];
     };
 
