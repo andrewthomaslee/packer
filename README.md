@@ -31,7 +31,7 @@
 
 ### **Included Modules**
 
-`Determinate Systems` • `Clan.lol` • `ZFS`
+`Determinate Systems` • `Clan.lol` • `ZFS` • `Ext4` • `Motd`
 
 </div>
 
