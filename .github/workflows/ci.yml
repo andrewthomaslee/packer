@@ -41,11 +41,17 @@ jobs:
       - name: Nix Flake Check
         run: nix flake check --show-trace
 
-      - name: Build Hcloud x86_64
-        run: nix build .#hcloud-x86_64 --show-trace
+      - name: Build Hcloud ext4 x86_64
+        run: nix build .#hcloud-ext4-x86_64 --show-trace
 
-      - name: Build AWS x86_64
-        run: nix build .#aws-x86_64 --show-trace
+      - name: Build Hcloud zfs x86_64
+        run: nix build .#hcloud-zfs-x86_64 --show-trace
+
+      - name: Build AWS ext4 x86_64
+        run: nix build .#aws-ext4-x86_64 --show-trace
+
+      - name: Build AWS zfs x86_64
+        run: nix build .#aws-zfs-x86_64 --show-trace
       
       - name: Build MkDocs
         run: nix build .#documentation --show-trace
