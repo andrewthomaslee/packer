@@ -32,7 +32,6 @@
                 format = "ext4";
                 mountpoint = "/";
                 mountOptions = ["noatime"];
-                extraOptions = ["-L" "nixos"];
               };
             };
           };
