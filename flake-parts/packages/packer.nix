@@ -1,4 +1,4 @@
-{...}: {
+{self, ...}: {
   # ------ Per-System ------ #
   perSystem = {
     pkgs,
@@ -117,7 +117,7 @@
         access_key = "\${var.aws_access_key_id}";
         secret_key = "\${var.aws_secret_access_key}";
         region = "\${var.aws_region}";
-        ssh_username = "admin";
+        ssh_username = "root";
         tags = {
           inherit release os distro;
         };
@@ -132,11 +132,11 @@
       arch =
         if system == "aarch64"
         then "arm64"
-        else "amd64";
+        else "x86_64";
       instance_type =
         if system == "aarch64"
-        then "t4g.medium"
-        else "t3a.medium";
+        then "t4g.large"
+        else "t3a.large";
     in
       pkgs.writeText "aws-${fs}-${system}.pkr.json" (builtins.toJSON (lib.recursiveUpdate aws {
         source.amazon-ebs.determinate_nixos = {
@@ -144,21 +144,29 @@
           ami_name = "nixos-${fs}-${system}-${release}-${timestamp}";
           source_ami_filter = {
             filters = {
-              name = "debian-13-${arch}-*";
-              root-device-type = "ebs";
-              virtualization-type = "hvm";
+              name = "determinate/nixos/epoch-1/*";
+              architecture = arch;
             };
             most_recent = true;
-            owners = ["136693071363"];
+            owners = ["535002876703"];
           };
+          launch_block_device_mappings = [
+            {
+              device_name = "/dev/xvda";
+              volume_size = 40;
+              volume_type = "gp3";
+              delete_on_termination = true;
+            }
+          ];
           tags = {inherit fs system instance_type;};
         };
         build.provisioner = [
           copy-ssh-key
           {
-            shell-local.inline = [
-              "clan machines install aws-${fs}-${system} --target-host root@\${build.Host} --no-persist-state -i \${var.temp_priv_key} --host-key-check none --phases install,reboot --yes"
-            ];
+            file = {
+              source = "${self}";
+              destination = "/etc/birth-flake";
+            };
           }
         ];
       }));
