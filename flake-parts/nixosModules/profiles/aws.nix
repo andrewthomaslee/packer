@@ -1,9 +1,21 @@
 {...}: {
-  flake.nixosModules.aws = {...}: {
-    disko.devices.disk.main.device = "/dev/nvme0n1";
+  flake.nixosModules.aws = {
+    modulesPath,
+    lib,
+    ...
+  }:
+    with lib; {
+      imports = [(modulesPath + "/virtualisation/amazon-image.nix")];
 
-    boot.initrd.availableKernelModules = ["nvme"];
+      disko.devices.disk.main.device = "/dev/nvme0n1";
 
-    networking.interfaces.ens5.useDHCP = true;
-  };
+      boot.initrd.availableKernelModules = ["nvme"];
+
+      networking = {
+        hostName = mkForce "";
+        interfaces.ens5.useDHCP = true;
+      };
+
+      services.udisks2.enable = mkForce false;
+    };
 }

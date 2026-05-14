@@ -6,7 +6,7 @@
     ...
   }: {
     imports = [
-      (modulesPath + "/profiles/qemu-guest.nix")
+      (modulesPath + "/profiles/minimal.nix")
       inputs.determinate.nixosModules.default
     ];
 
@@ -25,6 +25,13 @@
         PasswordAuthentication = lib.mkDefault true;
         KbdInteractiveAuthentication = lib.mkDefault true;
       };
+    };
+
+    # Tailscale
+    services.tailscale = {
+      enable = lib.mkDefault true;
+      port = lib.mkDefault 0;
+      useRoutingFeatures = lib.mkDefault "server";
     };
 
     # --- Clan-Core --- #
