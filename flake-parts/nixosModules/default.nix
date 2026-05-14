@@ -65,11 +65,7 @@
     time.timeZone = lib.mkDefault "America/Chicago";
 
     # --- Services --- #
-    services = {
-      journald.extraConfig = lib.mkDefault "SystemMaxUse=1G";
-      fwupd.enable = lib.mkDefault true;
-      acpid.enable = lib.mkDefault true;
-    };
+    services.journald.extraConfig = lib.mkDefault "SystemMaxUse=1G";
 
     # --- Hardware --- #
     hardware.enableRedistributableFirmware = lib.mkDefault true;
@@ -88,9 +84,6 @@
       network.enable = lib.mkDefault true;
     };
 
-    # --- Qemu Guest --- #
-    services.qemuGuest.enable = lib.mkDefault true;
-
     # --- Networking --- #
     networking = {
       firewall = {
@@ -100,19 +93,6 @@
       useNetworkd = lib.mkDefault true;
       networkmanager.enable = lib.mkDefault false;
       useDHCP = lib.mkDefault false;
-    };
-
-    # --- Boot --- #
-    boot = {
-      loader.grub = {
-        enable = lib.mkDefault true;
-        efiInstallAsRemovable = lib.mkDefault true;
-        efiSupport = lib.mkDefault true;
-      };
-      tmp = {
-        useTmpfs = lib.mkDefault false;
-        cleanOnBoot = lib.mkDefault true;
-      };
     };
   };
 }
