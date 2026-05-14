@@ -67,8 +67,8 @@
     mkHcloudPkrJson = fs: system: let
       server_type =
         if system == "aarch64"
-        then "cax31"
-        else "cpx42";
+        then "cax11"
+        else "cpx22";
     in
       pkgs.writeText "hcloud-${fs}-${system}.pkr.json" (builtins.toJSON (lib.recursiveUpdate hcloud {
         source.hcloud.determinate_nixos = {
@@ -135,8 +135,8 @@
         else "amd64";
       instance_type =
         if system == "aarch64"
-        then "t4g.medium"
-        else "t3.medium";
+        then "t4g.small"
+        else "t3a.small";
     in
       pkgs.writeText "aws-${fs}-${system}.pkr.json" (builtins.toJSON (lib.recursiveUpdate aws {
         source.amazon-ebs.determinate_nixos = {
