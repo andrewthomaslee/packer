@@ -163,10 +163,9 @@
         build.provisioner = [
           copy-ssh-key
           {
-            file = {
-              source = "${self}";
-              destination = "/etc/birth-flake";
-            };
+            shell-local.inline = [
+              "clan machines install aws-${fs}-${system} --target-host root@\${build.Host} --no-persist-state -i \${var.temp_priv_key} --host-key-check none --yes"
+            ];
           }
         ];
       }));
