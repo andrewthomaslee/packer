@@ -36,10 +36,10 @@
 </div>
 
 ## Usage
-### 1. Credentials
+### Cloud Credentials
 Create a `.env` file without spaces or comments in the root of the project follwing `.env.schema`
 
-### 2. Run
+### Run
 This will create a `Hetzner Cloud` image.
 Use the [*FlakeHub*](https://flakehub.com/flake/andrewthomaslee/packer?view=usage) url:
 ```console
@@ -49,11 +49,16 @@ or the [*GitHub*](https://github.com/andrewthomaslee/packer/releases) url:
 ```console
 nix run github:andrewthomaslee/packer#packer-hcloud-x86_64
 ```
-### 3. Result
+#### Hcloud
 ![packer-run](documentation/docs/assets/packer-run.png)
 In `Hetzner Cloud` you can see the new image:
 ![packer-result](documentation/docs/assets/packer-result.png)
 
+
+#### AWS
+![aws-packer](documentation/docs/assets/aws-packer.png)
+In `AWS` you can see the new AMI (Amazon Machine Image):
+![aws-ami](documentation/docs/assets/aws-ami.png)
 
 ## Project layout
 
