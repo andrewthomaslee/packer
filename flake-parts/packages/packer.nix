@@ -1,4 +1,4 @@
-{self, ...}: {
+{...}: {
   # ------ Per-System ------ #
   perSystem = {
     pkgs,
