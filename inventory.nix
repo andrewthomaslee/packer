@@ -11,10 +11,10 @@
 
   machines = {
     # AWS
-    aws-ext4-aarch64.tags = ["aws" "aarch64"];
-    aws-ext4-x86_64.tags = ["aws" "x86_64"];
-    aws-zfs-aarch64.tags = ["aws" "aarch64"];
-    aws-zfs-x86_64.tags = ["aws" "x86_64"];
+    aws-ext4-aarch64.tags = ["aws" "ext4" "aarch64"];
+    aws-ext4-x86_64.tags = ["aws" "ext4" "x86_64"];
+    aws-zfs-aarch64.tags = ["aws" "zfs" "aarch64"];
+    aws-zfs-x86_64.tags = ["aws" "zfs" "x86_64"];
     # Hetzner Cloud
     hcloud-ext4-aarch64.tags = ["hcloud" "ext4" "aarch64"];
     hcloud-ext4-x86_64.tags = ["hcloud" "ext4" "x86_64"];

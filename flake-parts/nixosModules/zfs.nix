@@ -55,13 +55,14 @@
               priority = 1;
             };
             ESP = {
-              size = "2G";
+              size = "3G";
               type = "EF00";
               content = {
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
                 mountOptions = ["umask=0077"];
+                extraArgs = ["-L" "ESP"];
               };
             };
             zfs = {
@@ -82,7 +83,16 @@
           acltype = "posixacl";
           xattr = "sa";
           atime = "off";
-          refreservation = "1G";
+          refreservation = "2G";
+        };
+        datasets."nix/store" = {
+          type = "zfs_fs";
+          mountpoint = "/nix/store";
+          options = {
+            sync = "disabled";
+            atime = "off";
+            "com.sun:auto-snapshot" = "false";
+          };
         };
       };
     };

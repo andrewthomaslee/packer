@@ -23,6 +23,7 @@
                 format = "vfat";
                 mountpoint = "/boot";
                 mountOptions = ["umask=0077" "noatime"];
+                extraArgs = ["-L" "ESP"];
               };
             };
             nixos = {
@@ -32,6 +33,7 @@
                 format = "ext4";
                 mountpoint = "/";
                 mountOptions = ["noatime"];
+                extraArgs = ["-L" "nixos"];
               };
             };
           };

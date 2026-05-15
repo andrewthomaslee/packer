@@ -5,13 +5,12 @@
     ...
   }:
     with lib; {
-      imports = [(modulesPath + "/virtualisation/amazon-image.nix")];
+      imports = [
+        (modulesPath + "/virtualisation/amazon-image.nix")
+      ];
 
-      networking = {
-        hostName = mkForce "";
-        interfaces.ens5.useDHCP = true;
-      };
+      disko.devices.disk.main.device = "/dev/nvme0n1";
 
-      services.udisks2.enable = mkForce false;
+      networking.hostName = mkForce "";
     };
 }

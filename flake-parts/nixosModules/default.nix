@@ -11,8 +11,6 @@
     ];
 
     # --- Users --- #
-    users.users.root.password = "goku-black-is-cool-and-awesome";
-
     system.stateVersion = lib.trivial.release;
 
     # --- OpenSSH --- #
@@ -22,8 +20,8 @@
       ports = [22];
       authorizedKeysFiles = ["/etc/ssh/global_keys"];
       settings = {
-        PasswordAuthentication = lib.mkDefault true;
-        KbdInteractiveAuthentication = lib.mkDefault true;
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
       };
     };
 
@@ -41,11 +39,11 @@
     };
 
     # --- Nixpkgs --- #
-    nixpkgs.config.allowUnfree = lib.mkDefault true;
+    nixpkgs.config.allowUnfree = true;
 
     # --- Nix --- #
     nix.settings = {
-      auto-optimise-store = lib.mkDefault true;
+      auto-optimise-store = true;
       trusted-users = ["root"];
       allowed-users = ["root"];
     };
@@ -61,35 +59,32 @@
       };
     };
     # --- Localization --- #
-    i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
-    time.timeZone = lib.mkDefault "America/Chicago";
+    i18n.defaultLocale = "en_US.UTF-8";
+    time.timeZone = "America/Chicago";
 
     # --- Services --- #
     services.journald.extraConfig = lib.mkDefault "SystemMaxUse=1G";
 
     # --- Hardware --- #
-    hardware.enableRedistributableFirmware = lib.mkDefault true;
+    hardware.enableRedistributableFirmware = true;
 
     # --- Environment --- #
     environment = {
       etc."ssh/global_keys".text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOb4q9LWJR54SzRkfmsA5KWA5/SDEG853oFC8TVilCW/"; # TODO: Change to your public key
-      enableAllTerminfo = lib.mkDefault true;
-      localBinInPath = lib.mkDefault true;
+      enableAllTerminfo = true;
+      localBinInPath = true;
       systemPackages = [inputs.fh.packages.${pkgs.stdenv.hostPlatform.system}.default];
     };
 
     # --- Cloud-Init --- #
     services.cloud-init = {
-      enable = lib.mkDefault true;
-      network.enable = lib.mkDefault true;
+      enable = true;
+      network.enable = true;
     };
 
     # --- Networking --- #
     networking = {
-      firewall = {
-        enable = lib.mkDefault false;
-        allowPing = lib.mkDefault true;
-      };
+      firewall.allowPing = true;
       useNetworkd = lib.mkDefault true;
       networkmanager.enable = lib.mkDefault false;
       useDHCP = lib.mkDefault false;
