@@ -9,7 +9,7 @@
         (modulesPath + "/virtualisation/amazon-image.nix")
       ];
 
-      disko.devices.disk.main.device = "/dev/xvda";
+      disko.devices.disk.main.device = "/dev/nvme0n1";
       boot.loader.grub.device = mkForce "nodev";
 
       networking.hostName = mkForce "";
