@@ -1,5 +1,9 @@
 name: CI
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -14,7 +18,7 @@ jobs:
     permissions:
       id-token: write
       pages: write
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
@@ -35,6 +39,12 @@ jobs:
 
       - name: Build AWS ext4 x86_64
         run: nix build .#aws-ext4-x86_64 --show-trace
+
+      - name: Build Hcloud Packer
+        run: nix build .#hcloud-ext4-aarch64-pkr-json --show-trace
+
+      - name: Build AWS Packer
+        run: nix build .#aws-ext4-aarch64-pkr-json --show-trace
       
       - name: Build MkDocs
         run: nix build .#documentation --show-trace
@@ -58,3 +68,28 @@ jobs:
           name: andrewthomaslee/packer
           rolling: true
           include-output-paths: true
+          
+      - name: Generate semver tag
+        id: semver
+        run: |
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          TAG="0.1.${COMMIT_COUNT}"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "Generated tag: ${TAG}"
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a ${{ steps.semver.outputs.tag }} -m "Release ${{ steps.semver.outputs.tag }}" ${{ github.sha }}
+          git push origin ${{ steps.semver.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.semver.outputs.tag }}
+          name: "Release ${{ steps.semver.outputs.tag }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
