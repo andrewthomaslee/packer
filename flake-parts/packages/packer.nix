@@ -6,10 +6,13 @@
     ...
   }: let
     # common variables
-    inherit (lib.trivial) release;
+    inherit (lib.trivial) release version revisionWithDefault;
     os = "nixos";
     distro = "determinate-clan";
     timestamp = "{{timestamp}}";
+    nix-version = version;
+    kernel-version = pkgs.linuxPackages.kernel.version;
+    nixpkgs-revision = revisionWithDefault "dirty";
 
     temp-key-vars = {
       temp_pub_key = {
@@ -55,7 +58,7 @@
         location = "hel1";
         ssh_username = "root";
         snapshot_labels = {
-          inherit release os distro;
+          inherit release os distro nix-version kernel-version nixpkgs-revision;
         };
       };
       build = {
@@ -119,7 +122,7 @@
         region = "\${var.aws_region}";
         ssh_username = "root";
         tags = {
-          inherit release os distro;
+          inherit release os distro nix-version kernel-version nixpkgs-revision;
         };
       };
       build = {

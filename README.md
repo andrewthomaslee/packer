@@ -5,14 +5,14 @@
 </div>
 
 <p align="center">
-  <a href="https://github.com/andrewthomaslee/packer/releases"><img src="https://img.shields.io/github/v/release/andrewthomaslee/packer?include_prereleases&style=for-the-badge" alt="Latest Release"></a>
+  <a href="https://flakehub.com/flake/andrewthomaslee/packer"><img src="https://img.shields.io/endpoint?url=https://flakehub.com/f/andrewthomaslee/packer/badge&style=for-the-badge" alt="FlakeHub"></a>
   <a href="https://github.com/andrewthomaslee/packer/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/andrewthomaslee/packer/ci.yml?style=for-the-badge" alt="CI Status"></a>
   <a href="https://github.com/andrewthomaslee/packer/blob/main/LICENSE"><img src="https://img.shields.io/github/license/andrewthomaslee/packer?style=for-the-badge&color=blue" alt="License"></a>
 </p>
 
 <p align="center">
   <a href="https://github.com/andrewthomaslee/packer"><img src="https://img.shields.io/badge/github-repo-24292e?logo=github&style=for-the-badge" alt="GitHub Repo"></a>
-  <a href="https://flakehub.com/flake/andrewthomaslee/packer?view=usage"><img src="https://img.shields.io/badge/flakehub-repo-purple?style=for-the-badge" alt="FlakeHub Repo"></a>
+  <a href="https://github.com/andrewthomaslee/packer/releases"><img src="https://img.shields.io/github/v/release/andrewthomaslee/packer?include_prereleases&style=for-the-badge&color=24292e" alt="Latest Release"></a>
 </p>
 
 

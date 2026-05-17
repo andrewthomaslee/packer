@@ -2,14 +2,14 @@
   description = "Minimal NixOS Packer Images and Scripts";
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2511";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*";
 
     # Determinate Nix
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
 
     # Clan.lol
     clan-core = {
-      url = "https://git.clan.lol/clan/clan-core/archive/25.11.tar.gz";
+      url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

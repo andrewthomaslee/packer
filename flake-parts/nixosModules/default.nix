@@ -1,6 +1,11 @@
-{inputs, ...}: {
+{
+  inputs,
+  self,
+  ...
+}: {
   flake.nixosModules.default = {
     modulesPath,
+    config,
     pkgs,
     lib,
     ...
@@ -11,28 +16,61 @@
       inputs.determinate.nixosModules.default
     ];
 
+    security.sudo.enable = false;
+
+    # --- Boot --- #
     boot = {
-      kernelPackages = pkgs.linuxPackages_hardened;
+      kernelPackages = pkgs.linuxPackages;
       kernel.sysctl = {
         "kernel.kptr_restrict" = 2; # Hide kernel pointers
         "kernel.dmesg_restrict" = 1; # Restrict dmesg access
+      };
+      tmp = {
+        useTmpfs = false;
+        cleanOnBoot = true;
+      };
+      loader.grub = {
+        efiInstallAsRemovable = true;
+        efiSupport = true;
       };
     };
 
     system.stateVersion = lib.trivial.release;
 
-    # --- OpenSSH --- #
-    services.openssh = {
-      enable = lib.mkForce true;
-      openFirewall = true;
-      ports = [22];
-      authorizedKeysFiles = ["/etc/ssh/global_keys"];
-      settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-        PermitRootLogin = "prohibit-password";
-        X11Forwarding = false;
-        AllowTcpForwarding = "no";
+    # --- Services --- #
+    services = {
+      # --- OpenSSH --- #
+      openssh = {
+        enable = lib.mkForce true;
+        openFirewall = true;
+        ports = [22];
+        authorizedKeysFiles = ["/etc/ssh/global_keys"];
+        settings = {
+          PasswordAuthentication = false;
+          KbdInteractiveAuthentication = false;
+          PermitRootLogin = "prohibit-password";
+          X11Forwarding = false;
+          AllowTcpForwarding = "no";
+        };
+      };
+      journald.extraConfig = lib.mkDefault "SystemMaxUse=1G";
+      # --- Cloud-Init --- #
+      cloud-init = {
+        enable = true;
+        network.enable = true;
+      };
+      # --- Tailscale --- #
+      tailscale.enable = true;
+      networkd-dispatcher = {
+        enable = true;
+        rules."50-tailscale" = {
+          onState = ["routable"];
+          script = ''
+            #!${pkgs.runtimeShell}
+            NETDEV=$(${pkgs.iproute2}/bin/ip -o route get 8.8.8.8 | cut -f 5 -d " ")
+            ${pkgs.ethtool}/bin/ethtool -K "$NETDEV" rx-udp-gro-forwarding on rx-gro-list off
+          '';
+        };
       };
     };
 
@@ -40,7 +78,10 @@
     clan.core.settings.state-version.enable = lib.mkForce false;
 
     # --- Nixpkgs --- #
-    nixpkgs.config.allowUnfree = true;
+    nixpkgs = {
+      config.allowUnfree = true;
+      overlays = [self.overlays.default];
+    };
 
     # --- Nix --- #
     nix.settings = {
@@ -64,9 +105,6 @@
     i18n.defaultLocale = "en_US.UTF-8";
     time.timeZone = "America/Chicago";
 
-    # --- Services --- #
-    services.journald.extraConfig = lib.mkDefault "SystemMaxUse=1G";
-
     # --- Hardware --- #
     hardware.enableRedistributableFirmware = true;
 
@@ -77,25 +115,25 @@
       localBinInPath = true;
       systemPackages = with pkgs; [
         fh
-        tailscale
+        git
         rsync
       ];
     };
 
-    # --- Cloud-Init --- #
-    services.cloud-init = {
-      enable = true;
-      network.enable = true;
-    };
-
     # --- Networking --- #
     networking = {
-      firewall.allowPing = true;
+      hostName = lib.mkForce config.clan.core.settings.machine.name;
+      firewall = {
+        allowPing = true;
+        trustedInterfaces = ["tailscale0"];
+        checkReversePath = "loose";
+      };
       useNetworkd = true;
-      networkmanager.enable = false;
+      networkmanager = {
+        enable = false;
+        unmanaged = ["tailscale0"];
+      };
       useDHCP = false;
     };
-
-    security.sudo.enable = false;
   };
 }

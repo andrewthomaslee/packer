@@ -19,6 +19,7 @@ in {
       pkgs = import inputs.nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [self.overlays.default];
       };
     };
 
@@ -31,6 +32,8 @@ in {
   flake = {
     # ------ NixOS Modules ------ #
     nixosModules.default._module.args = {inherit customLib;}; # pass `customLib` to all nixosModules
+
+    overlays.default = import (relativeToRoot "overlays") {inherit inputs self;};
 
     # --- Clan Configuration ------ #
     clan = {
