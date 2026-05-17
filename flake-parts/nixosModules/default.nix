@@ -7,10 +7,18 @@
   }: {
     imports = [
       (modulesPath + "/profiles/minimal.nix")
+      (modulesPath + "/profiles/perlless.nix")
       inputs.determinate.nixosModules.default
     ];
 
-    # --- Users --- #
+    boot = {
+      kernelPackages = pkgs.linuxPackages_hardened;
+      kernel.sysctl = {
+        "kernel.kptr_restrict" = 2; # Hide kernel pointers
+        "kernel.dmesg_restrict" = 1; # Restrict dmesg access
+      };
+    };
+
     system.stateVersion = lib.trivial.release;
 
     # --- OpenSSH --- #
@@ -22,21 +30,14 @@
       settings = {
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
+        PermitRootLogin = "prohibit-password";
+        X11Forwarding = false;
+        AllowTcpForwarding = "no";
       };
     };
 
-    # Tailscale
-    services.tailscale = {
-      enable = lib.mkDefault true;
-      port = lib.mkDefault 0;
-      useRoutingFeatures = lib.mkDefault "server";
-    };
-
     # --- Clan-Core --- #
-    clan.core = {
-      deployment.requireExplicitUpdate = lib.mkDefault false;
-      settings.state-version.enable = lib.mkForce false;
-    };
+    clan.core.settings.state-version.enable = lib.mkForce false;
 
     # --- Nixpkgs --- #
     nixpkgs.config.allowUnfree = true;
@@ -54,8 +55,9 @@
         "L+ /usr/local/bin - - - - /run/current-system/sw/bin/"
       ];
       services = {
-        NetworkManager-wait-online.enable = lib.mkForce false;
-        systemd-networkd-wait-online.enable = lib.mkForce false;
+        NetworkManager-wait-online.enable = false;
+        systemd-networkd-wait-online.enable = false;
+        xserver.enable = false;
       };
     };
     # --- Localization --- #
@@ -73,7 +75,11 @@
       etc."ssh/global_keys".text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOb4q9LWJR54SzRkfmsA5KWA5/SDEG853oFC8TVilCW/"; # TODO: Change to your public key
       enableAllTerminfo = true;
       localBinInPath = true;
-      systemPackages = [inputs.fh.packages.${pkgs.stdenv.hostPlatform.system}.default];
+      systemPackages = with pkgs; [
+        fh
+        tailscale
+        rsync
+      ];
     };
 
     # --- Cloud-Init --- #
@@ -85,9 +91,11 @@
     # --- Networking --- #
     networking = {
       firewall.allowPing = true;
-      useNetworkd = lib.mkDefault true;
-      networkmanager.enable = lib.mkDefault false;
-      useDHCP = lib.mkDefault false;
+      useNetworkd = true;
+      networkmanager.enable = false;
+      useDHCP = false;
     };
+
+    security.sudo.enable = false;
   };
 }

@@ -4,7 +4,10 @@
     lib,
     ...
   }: {
-    imports = [(modulesPath + "/profiles/qemu-guest.nix")];
+    imports = [
+      (modulesPath + "/profiles/qemu-guest.nix")
+      (modulesPath + "/profiles/headless.nix")
+    ];
 
     services.qemuGuest.enable = true;
 
@@ -17,7 +20,6 @@
     # --- Boot --- #
     boot = {
       loader.grub = {
-        enable = lib.mkDefault true;
         efiInstallAsRemovable = lib.mkDefault true;
         efiSupport = lib.mkDefault true;
       };

@@ -10,6 +10,16 @@
         (modulesPath + "/virtualisation/amazon-image.nix")
       ];
 
+      nixpkgs.overlays = [
+        (final: prev: {
+          git = prev.git.override {
+            perlSupport = false;
+            pythonSupport = false;
+            withManual = false;
+          };
+        })
+      ];
+
       disko.devices.disk.main.device = "/dev/nvme0n1";
       boot.loader.grub.device = mkForce "nodev";
 
