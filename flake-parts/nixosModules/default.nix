@@ -12,7 +12,6 @@
   }: {
     imports = [
       (modulesPath + "/profiles/minimal.nix")
-      (modulesPath + "/profiles/perlless.nix")
       inputs.determinate.nixosModules.default
     ];
 
@@ -30,6 +29,7 @@
         cleanOnBoot = true;
       };
       loader.grub = {
+        enable = true;
         efiInstallAsRemovable = true;
         efiSupport = true;
       };
@@ -115,7 +115,6 @@
       localBinInPath = true;
       systemPackages = with pkgs; [
         fh
-        git
         rsync
       ];
     };
@@ -123,17 +122,15 @@
     # --- Networking --- #
     networking = {
       hostName = lib.mkForce config.clan.core.settings.machine.name;
+      useNetworkd = true;
+      useDHCP = false;
+      networkmanager.enable = false;
       firewall = {
+        enable = true;
         allowPing = true;
         trustedInterfaces = ["tailscale0"];
         checkReversePath = "loose";
       };
-      useNetworkd = true;
-      networkmanager = {
-        enable = false;
-        unmanaged = ["tailscale0"];
-      };
-      useDHCP = false;
     };
   };
 }
